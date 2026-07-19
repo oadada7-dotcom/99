@@ -1,0 +1,4 @@
+# Working scratch — truncated/large binaries pulled from the Design project,
+# decode helpers, and local proofing artifacts. Not part of the deliverable.
+_inbox/
+*.b64
