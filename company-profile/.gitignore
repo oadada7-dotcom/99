@@ -1,4 +1,9 @@
-# Working scratch — truncated/large binaries pulled from the Design project,
-# decode helpers, and local proofing artifacts. Not part of the deliverable.
+# Working scratch & local build helpers — not part of the deliverable.
 _inbox/
+node_modules/
+package.json
+package-lock.json
+_*.mjs
+_*.html
 *.b64
+CompanyProfile_proof.pdf
