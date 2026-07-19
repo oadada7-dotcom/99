@@ -1,0 +1,57 @@
+:root {
+  /* ————————————————————————————————————————————————————————————
+     Adada & Kabbani — CANONICAL type (v2 · "The Measured Page")
+     Optima for everything. Arabic: Frutiger LT Arabic (Tajawal fallback
+     until files are provided). Four registers, differentiated by size,
+     case, weight, and tracking ONLY — never by a second family.
+     ———————————————————————————————————————————————————————————— */
+  --font-sans:   "Optima", "Optima Nova", "Candara", "Segoe UI", sans-serif;
+  --font-arabic: "Frutiger LT Arabic", "Tajawal", "Segoe UI", sans-serif;
+
+  /* ——— Weight roles ———
+     v2 sets display in LIGHT Optima (~340–400), not Bold. The lighter
+     display weight is central to the "drawn, measured" posture; heavy
+     display reads as v1 "quiet page" and should be avoided. */
+  --weight-display: 400;   /* display / headings (Regular; ~340 where a Light file exists) */
+  --weight-medium:  500;   /* kickers, tags, subheads */
+  --weight-body:    400;   /* running text */
+  /* Italic (400) — pull-quote / tagline voice, oxblood, sparing */
+
+  /* ——— Tracking — ALL-CAPS only; never track body or headlines ——— */
+  --track-caps:  0.14em;   /* kickers / tags */
+  --track-label: 0.20em;   /* technical "data voice": plate numbers, datum coords, spec keys */
+
+  /* ——— Type registers — four voices, all Optima ———
+     Display XL — cover word / hero
+     Display L  — section / page heading
+     Body       — running text
+     Technical  — the "data voice": uppercase, tracked, small */
+  --fs-display-xl: 108px;  /* 96–120, track -0.02em, lh ~0.94 */
+  --fs-display:    48px;   /* section/page heading 44–52, track -0.01em, lh ~1.0 */
+  --fs-subhead:    22px;   /* 20–24 */
+  --fs-body:       15.5px; /* 15–16, lh ~1.6, charcoal */
+  --fs-label:      10.5px; /* technical label: uppercase, track 0.20em */
+  --fs-caption:    12.5px; /* 12–13 */
+  --fs-stat:       76px;   /* big stat 64–88; unit ≈ ⅓ of stat size */
+
+  /* ——— Deck scale (16:9 landscape @ 1920×1080) ——— */
+  --fs-deck-display:  80px;  /* range 64–96 */
+  --fs-deck-headline: 48px;  /* 44–56 */
+
+  /* ——— Document scale (print, ~A4) ——— */
+  --fs-doc-display:  34pt;
+  --fs-doc-headline: 20pt;
+  --fs-doc-body:     10.5pt;
+  --fs-doc-caption:  8.5pt;
+
+  --leading-display:  0.94;
+  --leading-headline: 1.02;
+  --leading-body:     1.6;
+
+  /* ——— Measure: v2 body runs short, ≤42ch ——— */
+  --measure: 42ch;
+
+  /* ——— Legacy v1 aliases (kept so existing components keep resolving) ——— */
+  --fs-headline: var(--fs-display); /* v1 name → canonical display heading */
+  --fs-kicker:   var(--fs-label);   /* v1 kicker → technical label */
+}

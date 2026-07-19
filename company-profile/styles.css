@@ -1,0 +1,8 @@
+/* Adada & Kabbani — Company Profile
+   Global entry. Imports the A&K Design System tokens (v2 · The Measured Page).
+   Page-level composition lives in the profile HTML; values are driven from
+   these tokens, never hardcoded. */
+@import "./fonts/fonts.css";
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";

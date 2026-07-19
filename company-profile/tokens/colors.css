@@ -1,0 +1,62 @@
+:root {
+  /* ————————————————————————————————————————————————————————————
+     Adada & Kabbani — CANONICAL palette (v2 · "The Measured Page")
+     Single source of truth. Three brand values + charcoal-tint linework.
+     Evolution of the system, not a rebrand: Optima only, logos untouched.
+     No new hue is introduced; every linework value is a charcoal tint.
+     --oak is a low-opacity material TEXTURE (grain/veneer only) — never a
+     fourth brand colour, never a fill, never behind text.
+     ———————————————————————————————————————————————————————————— */
+
+  /* ——— Brand values (LOCKED) ——— */
+  --bone:      #F4F1EA;   /* page ground; plate-tag + label fills */
+  --charcoal:  #49413E;   /* body, headings, and ALL linework */
+  --oxblood:   #922133;   /* logo/monogram + one rule/numeral/dot per page, max */
+
+  /* ——— Linework — charcoal at reduced opacity (never new hues) ——— */
+  --hair:      rgba(73,65,62,0.14);   /* hairline rules */
+  --reveal:    rgba(73,65,62,0.08);   /* faint 12-col grid reveal */
+  --datum:     rgba(73,65,62,0.55);   /* the datum line + its ticks */
+
+  /* ——— Muted label floor — AA-safe on bone (≈5.2:1 at 10.5px) ———
+     Use for quiet tracked-caps labels (footer running title, captions,
+     descriptors). Replaces the sub-AA 0.55–0.7 tints used previously. */
+  --label-quiet: rgba(73,65,62,0.80);
+
+  /* ——— Material texture only (grain line / veneer edge, ≤10% opacity) ——— */
+  --oak:   #C9B28C;
+  --grain: rgba(73,65,62,0.20);       /* default grain tint (charcoal) */
+
+  /* ——— Semantic aliases ——— */
+  --surface-page:    var(--bone);
+  --surface-card:    var(--bone);     /* flat bone panels, hairline border */
+  --surface-inverse: var(--charcoal); /* v2 has no near-black; charcoal is the darkest value */
+  --surface-subtle:  var(--reveal);
+
+  --text-body:    var(--charcoal);
+  --text-muted:   var(--label-quiet); /* AA-safe; was #7D7D7C */
+  --text-inverse: var(--bone);
+  --text-accent:  var(--oxblood);
+
+  --accent:      var(--oxblood);      /* tags, key figures, links, rule ticks */
+  --rule:        var(--hair);         /* hairline rules */
+  --rule-strong: var(--charcoal);
+  --rule-width:  1px;
+
+  --link:        var(--oxblood);
+  --focus-ring:  var(--oxblood);
+
+  /* ——— Legacy v1 aliases ————————————————————————————————————————
+     Kept so existing components/slides that reference the old names keep
+     rendering — but they now resolve to canonical v2 values. Prefer the
+     canonical tokens above in all new work. The wood family is demoted:
+     it is NOT a v2 brand colour; use the --oak texture role instead. */
+  --ink:        var(--charcoal);   /* was #1A1A1A → charcoal (v2 darkest value) */
+  --cream:      var(--bone);       /* was #F5F1EC → bone */
+  --white:      #FFFFFF;
+  --grey-light: var(--reveal);     /* was #EAEAEA */
+  --grey-warm:  var(--hair);       /* was #D9D7D5 */
+  --grey-mid:   var(--label-quiet);/* was #7D7D7C (sub-AA) → AA-safe muted */
+  --espresso:   #42271A;           /* legacy only — not a v2 brand colour */
+  --walnut:     #6E4529;           /* legacy only — use --oak texture role in v2 */
+}
