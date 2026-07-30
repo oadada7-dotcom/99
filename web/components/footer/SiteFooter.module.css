@@ -1,0 +1,203 @@
+/* ==========================================================================
+   Footer — spec section 14
+   Compact, content-driven height. No viewport minimums, no dead space.
+   ========================================================================== */
+
+.footer {
+  position: relative;
+  z-index: var(--z-content);
+  background: var(--ak-charcoal);
+  color: var(--ak-bone-on-dark);
+  padding: clamp(56px, 6vw, 88px) var(--page-gutter) 28px;
+}
+
+.inner {
+  width: min(100%, var(--content-max));
+  margin-inline: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Wordmark and social row
+   -------------------------------------------------------------------------- */
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.brandMark {
+  display: inline-flex;
+  color: var(--ak-bone-on-dark);
+  transition: color 0.34s var(--ease-editorial);
+}
+
+.brandMark:hover,
+.brandMark:focus-visible {
+  color: var(--ak-oxblood);
+}
+
+.wordmark {
+  font-size: clamp(17px, 1.5vw, 24px);
+  letter-spacing: 0.24em;
+}
+
+/* 20–24px below the logo, per spec section 14. */
+.social {
+  margin-top: clamp(20px, 1.8vw, 24px);
+}
+
+.rule {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: var(--ak-light-hairline);
+}
+
+/* Wordmark block → first divider: 48–64px. */
+.brand + .rule {
+  margin-top: clamp(48px, 4.4vw, 64px);
+}
+
+/* --------------------------------------------------------------------------
+   Content grid
+   -------------------------------------------------------------------------- */
+
+.grid {
+  /* First divider → grid: 48–56px. */
+  margin-top: clamp(48px, 4.2vw, 56px);
+  /* Grid → lower divider: 56–72px. */
+  margin-bottom: clamp(56px, 5.4vw, 72px);
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.5fr)
+    minmax(0, 0.8fr)
+    minmax(0, 1fr)
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+  gap: clamp(32px, 3.4vw, 56px);
+}
+
+.statementColumn {
+  padding-right: clamp(12px, 2vw, 40px);
+}
+
+.statement {
+  max-width: 40ch;
+  font-family: var(--font-display-stack);
+  font-size: clamp(14px, 0.95vw, 16.5px);
+  font-weight: 300;
+  line-height: 1.62;
+  color: rgba(242, 237, 228, 0.7);
+}
+
+.column {
+  min-width: 0;
+}
+
+.columnTitle {
+  margin-bottom: clamp(16px, 1.6vw, 22px);
+  font-family: var(--font-meta-stack);
+  font-size: 9.5px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(242, 237, 228, 0.56);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.link {
+  display: inline-block;
+  padding-block: 5px;
+  font-family: var(--font-display-stack);
+  font-size: clamp(13.5px, 0.92vw, 15.5px);
+  font-weight: 300;
+  color: rgba(242, 237, 228, 0.78);
+  transition: color 0.28s var(--ease-editorial);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--ak-oxblood);
+}
+
+.address {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-family: var(--font-display-stack);
+  font-style: normal;
+  font-size: clamp(13.5px, 0.92vw, 15.5px);
+  font-weight: 300;
+  line-height: 1.5;
+  color: rgba(242, 237, 228, 0.7);
+}
+
+/* --------------------------------------------------------------------------
+   Legal row
+   -------------------------------------------------------------------------- */
+
+.legal {
+  /* Lower divider → legal row: 24–30px. */
+  margin-top: clamp(24px, 2.2vw, 30px);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.legalText,
+.established {
+  font-family: var(--font-meta-stack);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(242, 237, 228, 0.52);
+}
+
+.established {
+  color: rgba(242, 237, 228, 0.64);
+}
+
+/* --------------------------------------------------------------------------
+   Tablet
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1180px) {
+  .grid {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .statementColumn {
+    grid-column: 1 / -1;
+    padding-right: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile — wordmark, social, statement, navigation, capabilities,
+   showroom, factory, legal
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(30px, 7vw, 42px);
+  }
+
+  .statement {
+    max-width: none;
+  }
+}
+
+@media (max-width: 460px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

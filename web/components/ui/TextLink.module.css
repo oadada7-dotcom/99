@@ -1,0 +1,92 @@
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  /* Keeps the touch target at 44px without visually inflating the link. */
+  min-height: 44px;
+  font-family: var(--font-meta-stack);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  transition: color 0.35s var(--ease-editorial);
+}
+
+.link[data-size="sm"] {
+  font-size: clamp(10px, 0.72vw, 11.5px);
+}
+
+.link[data-size="md"] {
+  font-size: clamp(11px, 0.86vw, 13px);
+  letter-spacing: 0.18em;
+}
+
+.link[data-tone="oxblood"] {
+  color: var(--ak-oxblood);
+}
+
+.link[data-tone="dark"] {
+  color: var(--ak-heading);
+}
+
+.link[data-tone="light"] {
+  color: var(--ak-bone-on-dark);
+}
+
+.label {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 7px;
+}
+
+.rule {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.42;
+  transform-origin: left center;
+  transition:
+    opacity 0.42s var(--ease-editorial),
+    transform 0.52s var(--ease-editorial);
+}
+
+.arrow {
+  flex: none;
+  transition: transform 0.42s var(--ease-editorial);
+}
+
+@media (hover: hover) {
+  .link:hover .rule {
+    opacity: 1;
+    /* The underline extends past the label rather than merely brightening. */
+    transform: scaleX(1.09);
+  }
+
+  .link[data-arrow="right"]:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .link[data-arrow="diagonal"]:hover .arrow {
+    transform: translate(3px, -3px);
+  }
+}
+
+.link:focus-visible .rule {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rule,
+  .arrow {
+    transition: opacity 0.16s linear;
+  }
+
+  .link:hover .rule {
+    transform: none;
+  }
+
+  .link:hover .arrow {
+    transform: none;
+  }
+}

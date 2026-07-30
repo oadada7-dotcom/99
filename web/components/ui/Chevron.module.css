@@ -1,0 +1,10 @@
+.chevron {
+  flex: none;
+  /* 6–8px gap from the label is set by the parent's flex gap. */
+  transform-origin: 50% 55%;
+  transition: transform 0.42s var(--ease-editorial);
+}
+
+.chevron[data-open="true"] {
+  transform: rotate(180deg);
+}

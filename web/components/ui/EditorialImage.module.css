@@ -1,0 +1,58 @@
+.frame {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  isolation: isolate;
+}
+
+.cover {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+
+/*
+  The material panel. A quiet tonal surface with a faint directional weave, so
+  an unresolved or missing photograph still reads as a considered material
+  rather than an empty box. No text, no brackets, nothing to strip before
+  production.
+*/
+.panel {
+  position: absolute;
+  inset: 0;
+  background-color: var(--panel-base);
+  background-image: linear-gradient(
+      118deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(0, 0, 0, 0) 42%,
+      rgba(0, 0, 0, 0.06) 100%
+    ),
+    repeating-linear-gradient(
+      118deg,
+      rgba(0, 0, 0, 0.022) 0 1px,
+      rgba(0, 0, 0, 0) 1px 9px
+    );
+}
+
+.frame[data-tone="stone"] {
+  --panel-base: var(--ak-warm-stone);
+}
+
+.frame[data-tone="bone"] {
+  --panel-base: var(--ak-bone-soft);
+}
+
+.frame[data-tone="charcoal"] {
+  --panel-base: #2b2825;
+}
+
+.image {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 0.72s var(--ease-editorial);
+}
+
+.image[data-state="ready"] {
+  opacity: 1;
+}

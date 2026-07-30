@@ -1,0 +1,465 @@
+/* ==========================================================================
+   Fullscreen menu — spec section 15
+   ========================================================================== */
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-menu);
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--ak-charcoal);
+  color: var(--ak-bone-on-dark);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.menu[data-visible="true"] {
+  visibility: visible;
+}
+
+/* Clicks are ignored while the closing timeline plays out. */
+.menu[data-closing="true"] {
+  pointer-events: none;
+}
+
+.shell {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(28px, 3.4vh, 56px);
+  min-height: 100dvh;
+  max-height: 100dvh;
+  overflow-y: auto;
+  /* The preview bleeds past the right gutter; nothing may scroll sideways. */
+  overflow-x: hidden;
+  padding: clamp(22px, 2.6vh, 34px) var(--page-gutter) clamp(24px, 3vh, 38px);
+}
+
+/* --------------------------------------------------------------------------
+   Menu header
+   -------------------------------------------------------------------------- */
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  /* Aligns the monogram with the fixed header's own reserved zone. */
+  min-height: 44px;
+}
+
+.topMark {
+  display: inline-flex;
+  color: var(--ak-bone-on-dark);
+  transition: color 0.32s var(--ease-editorial);
+}
+
+.topMark:hover,
+.topMark:focus-visible {
+  color: var(--ak-oxblood);
+}
+
+.topActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--ak-light-hairline);
+  color: var(--ak-bone-on-dark);
+  transition:
+    color 0.3s var(--ease-editorial),
+    border-color 0.3s var(--ease-editorial),
+    background-color 0.3s var(--ease-editorial);
+}
+
+.iconButton:hover,
+.iconButton:focus-visible {
+  color: var(--ak-bone-on-dark);
+  background: var(--ak-oxblood);
+  border-color: var(--ak-oxblood);
+}
+
+/*
+  Oxblood on hover, per the brief. Not on focus, though: oxblood ink on charcoal
+  is about 1.9:1, far too weak to serve as a focus indicator. Focus falls
+  through to the shared `.iconButton` treatment — bone on an oxblood fill —
+  plus the bone outline ring.
+*/
+.close:hover {
+  background: transparent;
+  /* The glyph takes the oxblood accent, but the boundary keeps a bone tint so
+     the control stays identifiable — oxblood on oxblood-on-charcoal would drop
+     the whole button to under 2:1. */
+  border-color: rgba(242, 237, 228, 0.5);
+  color: var(--ak-oxblood);
+}
+
+/* --------------------------------------------------------------------------
+   Body — oversized navigation beside the persistent preview
+   -------------------------------------------------------------------------- */
+
+.body {
+  display: grid;
+  /* 64 / 36 — within the 62–66% and 34–38% the brief specifies. */
+  grid-template-columns: minmax(0, 64fr) minmax(0, 36fr);
+  gap: clamp(40px, 5vw, 96px);
+  align-items: stretch;
+  min-height: 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.navList {
+  width: 100%;
+}
+
+.navItem {
+  position: relative;
+  padding-block: clamp(2px, 0.5vh, 7px);
+}
+
+.navRow {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(14px, 1.6vw, 26px);
+}
+
+.navIndex {
+  flex: none;
+  width: 2.4ch;
+  font-family: var(--font-meta-stack);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: rgba(242, 237, 228, 0.5);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.34s var(--ease-editorial);
+}
+
+.navLabel {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(12px, 1.2vw, 20px);
+  font-family: var(--font-display-stack);
+  font-size: clamp(42px, 4.6vw, 78px);
+  font-weight: 200;
+  line-height: 0.98;
+  letter-spacing: -0.024em;
+  text-align: left;
+  color: var(--ak-muted-on-dark);
+  transition: color 0.34s var(--ease-editorial);
+}
+
+.navLabel[data-static="true"] {
+  cursor: default;
+}
+
+.navText {
+  position: relative;
+  display: inline-block;
+}
+
+/* The short oxblood underline — one of the few places oxblood appears here. */
+.navText::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0.06em;
+  width: clamp(28px, 2.6vw, 46px);
+  height: 1px;
+  background: var(--ak-oxblood);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.44s var(--ease-editorial);
+}
+
+.navLabel:hover,
+.navLabel:focus-visible,
+.navItem:hover .navLabel[data-static="true"] {
+  color: var(--ak-bone-on-dark);
+}
+
+.navLabel:hover .navText::after,
+.navLabel:focus-visible .navText::after,
+.navItem:hover .navLabel[data-static="true"] .navText::after {
+  transform: scaleX(1);
+}
+
+.navItem:hover .navIndex,
+.navItem:focus-within .navIndex {
+  color: var(--ak-oxblood);
+}
+
+.navChevron {
+  flex: none;
+  color: rgba(242, 237, 228, 0.52);
+}
+
+/* Current-page indicator. */
+.currentMark {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  background: var(--ak-oxblood);
+  transform: translateY(-0.5em);
+}
+
+/* --------------------------------------------------------------------------
+   Child links — beneath their parent, never in a floating box
+   -------------------------------------------------------------------------- */
+
+.children {
+  display: grid;
+  grid-template-rows: 1fr;
+  padding-left: calc(2.4ch + clamp(14px, 1.6vw, 26px));
+  transition:
+    grid-template-rows 0.48s var(--ease-editorial),
+    opacity 0.38s var(--ease-editorial);
+}
+
+.children[data-open="false"] {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+.childList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 clamp(14px, 1.4vw, 22px);
+  overflow: hidden;
+  padding-top: clamp(8px, 0.9vh, 14px);
+}
+
+.childList > li {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(14px, 1.4vw, 22px);
+}
+
+.childList > li + li::before {
+  content: "·";
+  color: rgba(242, 237, 228, 0.46);
+}
+
+.childLink {
+  display: inline-block;
+  padding-block: 6px;
+  font-family: var(--font-display-stack);
+  font-size: clamp(15px, 1.2vw, 20px);
+  font-weight: 300;
+  color: rgba(242, 237, 228, 0.56);
+  transition: color 0.28s var(--ease-editorial);
+}
+
+.childLink:hover,
+.childLink:focus-visible {
+  color: var(--ak-bone-on-dark);
+}
+
+/* --------------------------------------------------------------------------
+   Preview panel — sharp corners, one persistent surface
+   -------------------------------------------------------------------------- */
+
+/*
+  The panel runs to the right edge of the screen rather than stopping at the
+  gutter, so it reads as a full-height plate against the navigation instead of
+  a floating picture — and lands at ~36% of the viewport, matching the brief's
+  ratio measured either way.
+*/
+.previewColumn {
+  position: relative;
+  min-width: 0;
+  margin-right: calc(-1 * var(--page-gutter));
+}
+
+.preview {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* The permanent ground. Guarantees the panel is never an empty hole. */
+.previewBase {
+  position: absolute;
+  inset: 0;
+  background-color: #2b2825;
+  background-image: radial-gradient(
+    110% 80% at 50% 38%,
+    rgba(96, 84, 76, 0.4) 0%,
+    rgba(43, 40, 37, 0) 70%
+  );
+}
+
+.previewLayer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(1.015);
+  transition:
+    opacity 540ms var(--ease-editorial),
+    transform 700ms var(--ease-editorial);
+}
+
+.previewLayer[data-ready="true"] {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.previewLayer[data-reduced="true"] {
+  transform: none;
+  transition: opacity 180ms linear;
+}
+
+.previewImage,
+.previewVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* --------------------------------------------------------------------------
+   Menu footer
+   -------------------------------------------------------------------------- */
+
+.bottom {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: clamp(20px, 3vw, 48px);
+  padding-top: clamp(16px, 2vh, 26px);
+  border-top: 1px solid var(--ak-light-hairline);
+}
+
+.bottomSocial {
+  grid-column: 1;
+}
+
+.bottomMeta,
+.bottomEst {
+  font-family: var(--font-meta-stack);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(242, 237, 228, 0.52);
+}
+
+.bottomMeta {
+  text-align: center;
+}
+
+.bottomEst {
+  text-align: right;
+  color: rgba(242, 237, 228, 0.64);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Tablet — the preview stays while there is room for it
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1240px) {
+  .body {
+    grid-template-columns: minmax(0, 62fr) minmax(0, 38fr);
+    gap: clamp(28px, 3.4vw, 52px);
+  }
+
+  .navLabel {
+    font-size: clamp(38px, 4.4vw, 60px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile — no side preview, stacked navigation, expandable groups
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+  .shell {
+    gap: clamp(22px, 2.6vh, 36px);
+  }
+
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .previewColumn {
+    display: none;
+  }
+
+  .nav {
+    align-items: flex-start;
+    /* The list scrolls internally when it outgrows the viewport. */
+    width: 100%;
+  }
+
+  .navItem {
+    padding-block: clamp(4px, 0.9vh, 10px);
+    border-bottom: 1px solid rgba(242, 237, 228, 0.08);
+  }
+
+  .navRow {
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .navLabel {
+    flex: 1;
+    justify-content: space-between;
+    font-size: clamp(34px, 10vw, 52px);
+  }
+
+  .childList {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .childList > li + li::before {
+    content: none;
+  }
+
+  .childLink {
+    font-size: clamp(15px, 4.4vw, 19px);
+  }
+
+  .bottom {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    justify-items: start;
+  }
+
+  .bottomMeta,
+  .bottomEst {
+    text-align: left;
+  }
+
+  .bottomEst {
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navText::after,
+  .children,
+  .previewLayer {
+    transition-duration: 0.16s;
+  }
+}

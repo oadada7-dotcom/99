@@ -1,0 +1,372 @@
+/* ==========================================================================
+   Fixed global header — spec section 7
+   ========================================================================== */
+
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--header-height);
+  z-index: var(--z-header);
+  /* The bar itself never intercepts pointer events; its controls do. */
+  pointer-events: none;
+  transition: opacity 0.32s var(--ease-editorial);
+}
+
+.header[data-hidden="true"] {
+  opacity: 0;
+}
+
+/*
+  A limited legibility scrim, only over dark media. Without it the bone
+  wordmark can land on a bright patch of the hero.
+*/
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: calc(var(--header-height) + 44px);
+  background: linear-gradient(
+    to bottom,
+    rgba(33, 31, 28, 0.34),
+    rgba(33, 31, 28, 0)
+  );
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-editorial);
+  pointer-events: none;
+}
+
+.header[data-tone="light"]::before {
+  opacity: 1;
+}
+
+.inner {
+  position: relative;
+  width: min(calc(100% - (2 * var(--page-gutter))), var(--content-max));
+  margin-inline: auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.header a,
+.header button {
+  pointer-events: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Left mark — reserved zone, wordmark crossfading to monogram
+   -------------------------------------------------------------------------- */
+
+.mark {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  height: 100%;
+  color: var(--ak-bone-on-dark);
+  transition: color 0.5s var(--ease-editorial);
+}
+
+.header[data-tone="dark"] .mark {
+  color: var(--ak-heading);
+}
+
+/* The monogram reads as the brand ink once the wordmark is gone. */
+.header[data-collapsed="true"][data-tone="dark"] .mark {
+  color: var(--ak-oxblood);
+}
+
+.markWordmark,
+.markMonogram {
+  transition: opacity 0.44s var(--ease-editorial);
+}
+
+.markMonogram {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.header[data-collapsed="true"] .markWordmark {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.header[data-collapsed="true"] .markMonogram {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Centred navigation
+   -------------------------------------------------------------------------- */
+
+.nav {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  transition:
+    opacity 0.36s var(--ease-editorial),
+    visibility 0.36s;
+}
+
+.header[data-collapsed="true"] .nav {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.navList {
+  display: flex;
+  align-items: center;
+  gap: clamp(2px, 0.5vw, 10px);
+}
+
+.navItemWithPanel {
+  position: relative;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  /* 6–8px between label and chevron — spec section 7. */
+  gap: 7px;
+  height: 44px;
+  padding-inline: clamp(7px, 0.7vw, 13px);
+  font-family: var(--font-meta-stack);
+  font-size: clamp(11px, 0.76vw, 12.5px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  color: rgba(242, 237, 228, 0.78);
+  transition: color 0.3s var(--ease-editorial);
+}
+
+.header[data-tone="dark"] .navLink {
+  color: rgba(73, 63, 57, 0.84);
+}
+
+.navLink:hover,
+.navLink:focus-visible,
+.navLink[aria-expanded="true"] {
+  color: var(--ak-bone-on-dark);
+}
+
+.header[data-tone="dark"] .navLink:hover,
+.header[data-tone="dark"] .navLink:focus-visible,
+.header[data-tone="dark"] .navLink[aria-expanded="true"] {
+  color: var(--ak-oxblood);
+}
+
+/* --------------------------------------------------------------------------
+   Dropdown panel — a structural surface, not a floating card:
+   sharp corners, one hairline, no shadow.
+   -------------------------------------------------------------------------- */
+
+.panel {
+  position: absolute;
+  top: calc(50% + 22px);
+  left: 50%;
+  min-width: 220px;
+  padding: 6px 0;
+  background: rgba(33, 31, 28, 0.94);
+  border: 1px solid var(--ak-light-hairline);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -6px);
+  transition:
+    opacity 0.34s var(--ease-editorial),
+    transform 0.34s var(--ease-editorial),
+    visibility 0.34s;
+}
+
+.header[data-tone="dark"] .panel {
+  background: var(--ak-bone-soft);
+  border-color: var(--ak-hairline);
+}
+
+.panel[data-open="true"] {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.panelLink {
+  display: block;
+  padding: 11px 22px;
+  font-family: var(--font-meta-stack);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  color: rgba(242, 237, 228, 0.76);
+  transition:
+    color 0.26s var(--ease-editorial),
+    background-color 0.26s var(--ease-editorial);
+}
+
+.header[data-tone="dark"] .panelLink {
+  color: rgba(73, 63, 57, 0.78);
+}
+
+.panelLink:hover,
+.panelLink:focus-visible {
+  color: var(--ak-bone-on-dark);
+  background: rgba(146, 33, 51, 0.42);
+}
+
+.header[data-tone="dark"] .panelLink:hover,
+.header[data-tone="dark"] .panelLink:focus-visible {
+  color: var(--ak-oxblood);
+  background: rgba(146, 33, 51, 0.07);
+}
+
+/* --------------------------------------------------------------------------
+   Right-hand actions
+   -------------------------------------------------------------------------- */
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  color: var(--ak-bone-on-dark);
+  transition: color 0.5s var(--ease-editorial);
+}
+
+.header[data-tone="dark"] .actions {
+  color: var(--ak-heading);
+}
+
+.contactText {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  font-family: var(--font-meta-stack);
+  font-size: clamp(10px, 0.72vw, 11.5px);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  white-space: nowrap;
+  transition:
+    color 0.3s var(--ease-editorial),
+    opacity 0.3s var(--ease-editorial);
+}
+
+.contactText:hover,
+.contactText:focus-visible {
+  color: var(--ak-oxblood);
+}
+
+.header[data-tone="light"] .contactText:hover,
+.header[data-tone="light"] .contactText:focus-visible {
+  color: #ffffff;
+}
+
+.iconButton {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid currentColor;
+  color: inherit;
+  transition:
+    background-color 0.32s var(--ease-editorial),
+    color 0.32s var(--ease-editorial),
+    border-color 0.32s var(--ease-editorial);
+}
+
+.iconButton:hover,
+.iconButton:focus-visible {
+  background: var(--ak-oxblood);
+  border-color: var(--ak-oxblood);
+  color: var(--ak-bone-on-dark);
+}
+
+.burger {
+  flex-direction: column;
+  gap: 5px;
+}
+
+.burger span {
+  display: block;
+  width: 18px;
+  height: 1.25px;
+  background: currentColor;
+  transition: width 0.34s var(--ease-editorial);
+}
+
+.burger span:last-child {
+  width: 11px;
+}
+
+.burger:hover span:last-child,
+.burger:focus-visible span:last-child {
+  width: 18px;
+}
+
+/* Collapsed: text action gives way to the icon pair. */
+.header[data-collapsed="true"] .contactText {
+  display: none;
+}
+
+.header[data-collapsed="true"] .iconButton {
+  display: inline-flex;
+}
+
+/* --------------------------------------------------------------------------
+   Below the navigation's comfortable width the bar behaves as collapsed at
+   every scroll position: monogram plus the icon pair.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1180px) {
+  .nav,
+  .contactText {
+    display: none;
+  }
+
+  .markWordmark {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .markMonogram {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .iconButton {
+    display: inline-flex;
+  }
+
+  .header[data-tone="dark"] .mark {
+    color: var(--ak-oxblood);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .markWordmark,
+  .markMonogram,
+  .nav,
+  .panel,
+  .mark,
+  .actions,
+  .header::before {
+    transition-duration: 0.16s;
+  }
+
+  .burger span {
+    transition: none;
+  }
+}

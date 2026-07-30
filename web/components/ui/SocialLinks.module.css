@@ -1,0 +1,52 @@
+/*
+  Monochrome line icons — spec section 14: 17px glyphs, 16px visual gaps, no
+  circular backgrounds, no labels.
+
+  A 17px glyph with a 16px gap gives a 33px pitch, so 44px-square targets would
+  overlap and steal each other's clicks. Each link instead fills the full 44px
+  vertically and the whole 33px pitch horizontally: a comfortable,
+  non-overlapping target that keeps the specified visual rhythm exactly.
+*/
+
+.list {
+  display: flex;
+  align-items: center;
+  /* Pulls the first glyph optically flush with the column edge. */
+  margin-inline-start: -8px;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 33px;
+  height: 44px;
+  transition:
+    color 0.34s var(--ease-editorial),
+    transform 0.34s var(--ease-editorial);
+}
+
+.list[data-tone="light"] .link {
+  color: var(--ak-bone-on-dark);
+}
+
+.list[data-tone="dark"] .link {
+  color: var(--ak-heading);
+}
+
+@media (hover: hover) {
+  .link:hover {
+    color: var(--ak-oxblood);
+    transform: translateY(-2px);
+  }
+}
+
+.link:focus-visible {
+  color: var(--ak-oxblood);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link:hover {
+    transform: none;
+  }
+}

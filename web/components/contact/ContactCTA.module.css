@@ -1,0 +1,112 @@
+/* ==========================================================================
+   Contact CTA — spec section 13
+   ========================================================================== */
+
+.section {
+  position: relative;
+  z-index: var(--z-content);
+  background: var(--ak-oxblood);
+  color: var(--ak-bone-on-dark);
+  /* Strong, but content-driven. Deliberately not a viewport-height block. */
+  padding-block: clamp(96px, 9.5vw, 158px);
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.45fr) minmax(0, 1.55fr);
+  column-gap: clamp(56px, 9vw, 150px);
+  align-items: start;
+}
+
+.label {
+  padding-top: clamp(8px, 1vw, 16px);
+  color: rgba(242, 237, 228, 0.8);
+}
+
+.content {
+  max-width: 920px;
+  justify-self: center;
+}
+
+.heading {
+  font-family: var(--font-display-stack);
+  font-size: clamp(40px, 4.4vw, 84px);
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: -0.026em;
+  color: var(--ak-bone-on-dark);
+}
+
+.details {
+  margin-top: clamp(48px, 6vw, 86px);
+  display: grid;
+  grid-template-columns: minmax(240px, 430px) auto;
+  align-items: end;
+  gap: clamp(40px, 7vw, 110px);
+}
+
+.detailsText {
+  /* The paragraph stays left-aligned within the right-hand column. */
+  text-align: left;
+}
+
+.support {
+  font-family: var(--font-display-stack);
+  font-size: clamp(15px, 1.02vw, 17.5px);
+  font-weight: 300;
+  line-height: 1.62;
+  color: rgba(242, 237, 228, 0.78);
+}
+
+.location {
+  margin-top: clamp(24px, 2.4vw, 36px);
+  font-family: var(--font-meta-stack);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(242, 237, 228, 0.8);
+}
+
+.action {
+  justify-self: start;
+  padding-bottom: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Tablet
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1120px) {
+  .inner {
+    column-gap: clamp(36px, 5vw, 72px);
+  }
+
+  .content {
+    justify-self: start;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile — label, heading, paragraph, location, action
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 860px) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: clamp(30px, 5vw, 44px);
+  }
+
+  .label {
+    padding-top: 0;
+  }
+
+  .content {
+    max-width: none;
+  }
+
+  .details {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(30px, 6vw, 44px);
+  }
+}

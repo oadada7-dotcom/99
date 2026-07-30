@@ -1,0 +1,241 @@
+/* ==========================================================================
+   Adada & Kabbani — foundation
+   Tokens, typography, layout shell and shared primitives.
+   Component-specific rules live in co-located CSS Modules.
+   ========================================================================== */
+
+:root {
+  --ak-bone: #f3eee5;
+  --ak-bone-soft: #f7f3ec;
+  --ak-warm-stone: #e5ded3;
+  --ak-oxblood: #922133;
+  --ak-oxblood-dark: #761827;
+  --ak-charcoal: #211f1c;
+  --ak-heading: #493f39;
+  --ak-body: rgba(73, 63, 57, 0.76);
+  /*
+    Secondary metadata on light grounds. A solid value rather than a low-alpha
+    heading, because alpha-composited copy at 9–12px fell below AA on both bone
+    and warm stone. 5.8:1 on bone, 5.0:1 on warm stone, and still clearly
+    subordinate to --ak-heading.
+  */
+  --ak-body-muted: #635a54;
+  --ak-hairline: rgba(73, 63, 57, 0.16);
+  --ak-light-hairline: rgba(242, 237, 228, 0.16);
+  --ak-bone-on-dark: #f2ede4;
+  --ak-muted-on-dark: rgba(242, 237, 228, 0.48);
+
+  --page-gutter: clamp(24px, 5vw, 76px);
+  --content-max: 1680px;
+  --header-height: 104px;
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Layer order — spec section 7. */
+  --z-content: 1;
+  --z-header: 300;
+  --z-menu: 500;
+  --z-dialog: 600;
+
+  /* Section rhythm. One scale, reused, so the page reads as one document. */
+  --section-pad: clamp(110px, 11vw, 190px);
+
+  --font-display-stack: var(--font-display), "Optima", "Optima Nova", Palatino,
+    "Palatino Linotype", Georgia, serif;
+  --font-meta-stack: var(--font-meta), "Helvetica Neue", Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: var(--header-height);
+}
+
+body {
+  margin: 0;
+  background: var(--ak-bone);
+  color: var(--ak-heading);
+  font-family: var(--font-display-stack);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* Nothing in the composition may cause sideways travel — spec section 22. */
+  overflow-x: clip;
+}
+
+/* Scroll lock while the fullscreen menu owns the viewport. */
+body[data-scroll-locked="true"] {
+  overflow: hidden;
+  /* Compensating for the removed scrollbar prevents a horizontal jump. */
+  padding-right: var(--scrollbar-gap, 0px);
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(146, 33, 51, 0.18);
+  color: var(--ak-charcoal);
+}
+
+/* Sharp by default. Radii are not part of this visual language. */
+button,
+input,
+a,
+img,
+video,
+figure,
+section,
+div {
+  border-radius: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Focus
+   -------------------------------------------------------------------------- */
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ak-oxblood);
+  outline-offset: 3px;
+}
+
+/*
+  Oxblood has too little separation from charcoal and from the CTA's own
+  oxblood ground, so every dark surface takes a warm-bone ring instead.
+  `data-header-tone="light"` already marks exactly the dark sections (it is
+  what tells the fixed chrome to switch to bone), so it does double duty here.
+*/
+[data-surface="dark"] :focus-visible,
+[data-header-tone="light"] :focus-visible,
+header[data-tone="light"] :focus-visible {
+  outline-color: var(--ak-bone-on-dark);
+}
+
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -120%);
+  z-index: calc(var(--z-dialog) + 10);
+  background: var(--ak-charcoal);
+  color: var(--ak-bone-on-dark);
+  padding: 14px 22px;
+  font-family: var(--font-meta-stack);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: transform 0.28s var(--ease-editorial);
+}
+
+.skip-link:focus-visible {
+  transform: translate(-50%, 0);
+}
+
+/* --------------------------------------------------------------------------
+   Layout shell
+   -------------------------------------------------------------------------- */
+
+.shell {
+  width: min(calc(100% - (2 * var(--page-gutter))), var(--content-max));
+  margin-inline: auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Typography
+
+   Only the section label is global, because it is the one setting that must be
+   pixel-identical everywhere it appears. Display and body settings live in the
+   section that uses them: each needs its own measure, colour and optical size,
+   and the shared voice comes from the font, weight and tracking tokens above
+   rather than from a shared class.
+   -------------------------------------------------------------------------- */
+
+.section-label {
+  display: block;
+  font-family: var(--font-meta-stack);
+  font-size: clamp(10px, 0.7vw, 12px);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ak-oxblood);
+}
+
+.section-label--on-dark {
+  color: rgba(242, 237, 228, 0.62);
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   Content stays complete; only translation, scale and stagger are removed.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.16s !important;
+    scroll-behavior: auto !important;
+  }
+}

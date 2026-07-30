@@ -1,0 +1,84 @@
+/*
+  Circular carousel controls — spec section 11.
+  Both buttons are always the same diameter, and the group never moves or
+  re-animates while the cards change. Circles are deliberate here; the rest of
+  the page stays square.
+*/
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: clamp(46px, 3.6vw, 56px);
+  height: clamp(46px, 3.6vw, 56px);
+  border-radius: 50%;
+  transition:
+    background-color 0.4s var(--ease-editorial),
+    border-color 0.4s var(--ease-editorial),
+    color 0.4s var(--ease-editorial),
+    opacity 0.4s var(--ease-editorial);
+}
+
+/* Holds the pointer target at 44px minimum even at the smallest scale. */
+.button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+}
+
+.button[data-variant="outline"] {
+  background: transparent;
+  border: 1px solid var(--ak-oxblood);
+  color: var(--ak-oxblood);
+}
+
+.button[data-variant="solid"] {
+  background: var(--ak-oxblood);
+  border: 1px solid var(--ak-oxblood);
+  color: var(--ak-bone-on-dark);
+}
+
+.arrow {
+  transition: transform 0.4s var(--ease-editorial);
+}
+
+@media (hover: hover) {
+  .button[data-variant="outline"]:not(:disabled):hover {
+    background: var(--ak-oxblood);
+    color: var(--ak-bone-on-dark);
+  }
+
+  .button[data-variant="solid"]:not(:disabled):hover {
+    background: var(--ak-oxblood-dark);
+    border-color: var(--ak-oxblood-dark);
+  }
+
+  .button[data-direction="right"]:not(:disabled):hover .arrow {
+    transform: translateX(3px);
+  }
+
+  .button[data-direction="left"]:not(:disabled):hover .arrow {
+    transform: translateX(-3px);
+  }
+}
+
+.button:disabled {
+  opacity: 0.34;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    transition: none;
+  }
+
+  .button:hover .arrow {
+    transform: none !important;
+  }
+}

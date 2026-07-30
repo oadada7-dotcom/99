@@ -1,0 +1,251 @@
+/* ==========================================================================
+   Hero — spec section 8
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  z-index: var(--z-content);
+  background: var(--ak-charcoal);
+}
+
+/* The pinned stage. Full bleed at the first frame and at the last. */
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--ak-charcoal);
+}
+
+/* --------------------------------------------------------------------------
+   Media stack
+   -------------------------------------------------------------------------- */
+
+.media {
+  position: absolute;
+  inset: 0;
+}
+
+/*
+  Permanent base. Everything above it can be mid-flight, missing or failed and
+  the hero still reads as an intentional dark surface.
+*/
+.mediaBase {
+  position: absolute;
+  inset: 0;
+  background-color: #1c1a18;
+  background-image: radial-gradient(
+    120% 90% at 50% 42%,
+    rgba(94, 82, 74, 0.42) 0%,
+    rgba(28, 26, 24, 0) 68%
+  );
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+}
+
+/*
+  One crop for every layer — drawing, poster, video and fallback frame — so the
+  composition never shifts as the sequence hands over. Spec section 8.
+*/
+.mediaImage,
+.mediaVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/*
+  The clip's own reveal, gated on readiness rather than on a scroll position.
+  This multiplies with the layer opacity the timeline drives, so the video can
+  only ever become visible once it genuinely has frames to show.
+*/
+.mediaVideo {
+  opacity: 0;
+  transition: opacity 0.8s var(--ease-editorial);
+}
+
+.mediaVideo[data-ready="true"] {
+  opacity: 1;
+}
+
+/* Limited legibility overlay — the only gradients on the page. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(28, 26, 24, 0.46) 0%,
+      rgba(28, 26, 24, 0.08) 34%,
+      rgba(28, 26, 24, 0.1) 62%,
+      rgba(28, 26, 24, 0.62) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(28, 26, 24, 0.44) 0%,
+      rgba(28, 26, 24, 0) 58%
+    );
+}
+
+/* --------------------------------------------------------------------------
+   Overlaid content
+   -------------------------------------------------------------------------- */
+
+.content {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 32px;
+  padding-block: calc(var(--header-height) + clamp(16px, 3vh, 40px))
+    clamp(26px, 4.4vh, 56px);
+  /* Holds the copy inside --content-max without ever crossing the gutter. */
+  padding-inline: max(
+    var(--page-gutter),
+    calc((100% - var(--content-max)) / 2)
+  );
+  pointer-events: none;
+  color: var(--ak-bone-on-dark);
+}
+
+.intro {
+  align-self: center;
+  max-width: min(1120px, 72vw);
+}
+
+.introLabel {
+  margin-bottom: clamp(20px, 2.4vw, 34px);
+}
+
+.introHeading {
+  font-family: var(--font-display-stack);
+  font-size: clamp(46px, 5.6vw, 100px);
+  font-weight: 200;
+  line-height: 0.98;
+  letter-spacing: -0.026em;
+  color: var(--ak-bone-on-dark);
+  text-wrap: balance;
+}
+
+.introSupport {
+  margin-top: clamp(22px, 2.2vw, 34px);
+  max-width: 52ch;
+  font-family: var(--font-display-stack);
+  font-size: clamp(15px, 1.05vw, 18px);
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(242, 237, 228, 0.72);
+}
+
+.footerRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+/* All five captions occupy the same cell so they crossfade in place. */
+.captions {
+  display: grid;
+}
+
+.caption {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-meta-stack);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.captionIndex {
+  color: rgba(242, 237, 228, 0.5);
+  font-variant-numeric: tabular-nums;
+}
+
+.captionRule {
+  width: clamp(26px, 3vw, 48px);
+  height: 1px;
+  background: rgba(242, 237, 228, 0.34);
+}
+
+.captionText {
+  color: var(--ak-bone-on-dark);
+}
+
+.cue {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-meta-stack);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(242, 237, 228, 0.62);
+  white-space: nowrap;
+}
+
+.cueRule {
+  position: relative;
+  width: 54px;
+  height: 1px;
+  background: rgba(242, 237, 228, 0.24);
+  overflow: hidden;
+}
+
+/* A single quiet travelling tick, not continuous decorative motion. */
+.cueRule::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 18px;
+  background: var(--ak-bone-on-dark);
+  animation: cueTravel 2.9s var(--ease-editorial) infinite;
+}
+
+@keyframes cueTravel {
+  0% {
+    transform: translateX(-100%);
+  }
+  60%,
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+@media (max-width: 900px) {
+  .intro {
+    max-width: none;
+  }
+
+  .footerRow {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .cue {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cueRule::after {
+    animation: none;
+    width: 100%;
+    opacity: 0.4;
+  }
+
+  .mediaVideo {
+    transition-duration: 0.2s;
+  }
+}
